@@ -18,49 +18,39 @@ class Station
     @trains.delete(train)
   end
 
-  def get_train_list
+  def get_train_list (type = :all)
     puts "Station: #{@name} Train list:"
-    @trains.each { |train| puts train.number }
+    puts "Type of trains is #{type}" if type.class == String 
+    @trains.select { |train| type == :all || train.type == type } 
   end       
-
-  def get_amt_trains_by_type
-    passenger = 0
-    cargo = 0
-    @trains.each { |train| 
-      passenger += 1 if train.type == "passenger"
-      cargo += 1 if train.type == "cargo" 
-    }   
-    puts "Passenger trains amt :#{passenger}"
-    puts "Cargo trains amt :#{cargo}"    
-  end
 
 end
  
 class Route
   
-  attr_reader :list_route
+  attr_reader :stations
 
   def initialize(name ,f_station, l_station)
     @name = name
-    @list_route = [f_station, l_station]
+    @stations = [f_station, l_station]
     puts "Route #{@name} created:"    
   end
 
   def add_station(station)
-    @list_route.insert(-2, station)
+    @stations.insert(-2, station)
     puts "#{station.name} added to route #{@name}."    
   end
 
   def delete_station(station)
-    if (station != @list_route.first || station != @list_route.last) 
-      del_station = @list_route.delete(station)
+    if (station != @stations.first || station != @stations.last) 
+      del_station = @stations.delete(station)
       puts "#{station.name} deleted from route #{@name}." if del_station  
     end
   end
 
   def get_route_list
     puts "Route #{@name} list:"
-    @list_route.each { |station| puts station.name }
+    @stations.each { |station| puts station.name }
   end
 
 end
@@ -95,15 +85,14 @@ class Train
 
   def set_route(route)
     @route = route
-    @list_route = route.list_route 
-    set_station(@list_route[0])
+    set_station(@route.stations[0])
   end
 
   def set_station(station)
      @current_station.departure(self) if @current_station
      @current_station = station
      @current_station.arrival(self)
-     @index_station = @list_route.index(@current_station)
+     @index_station = @route.stations.index(@current_station)
   end
 
   def first_station? 
@@ -111,21 +100,21 @@ class Train
   end
 
   def last_station? 
-    @index_station == @list_route.length - 1
+    @index_station == @route.stations.length - 1
   end 
 
   def go_back
-    set_station(@list_route[@index_station - 1]) if !first_station? 
+    set_station(@route.stations[@index_station - 1]) if !first_station? 
   end
 
   def go_forth
-    set_station(@list_route[@index_station + 1]) if !last_station?   
+    set_station(@route.stations[@index_station + 1]) if !last_station?   
   end
 
   def messege_for_passegers
-    puts "Previous station #{@list_route[@index_station - 1].name}" if !first_station?
+    puts "Previous station #{@route.stations[@index_station - 1].name}" if !first_station?
     puts "Current station: #{@current_station.name}"
-    puts "Next station: #{@list_route[@index_station + 1].name}" if !last_station?  
+    puts "Next station: #{@route.stations[@index_station + 1].name}" if !last_station?  
   end
 
 end  
@@ -186,5 +175,6 @@ train4.set_route(route_1)
 train5 = Train.new("G-010", "cargo", 10)
 train5.set_route(route_1)
 
-station_1.get_train_list
-station_1.get_amt_trains_by_type
+puts station_1.get_train_list("passenger")
+puts station_1.get_train_list("cargo")
+puts station_1.get_train_list()

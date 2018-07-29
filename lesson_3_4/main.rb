@@ -1,7 +1,8 @@
 require_relative 'station'
 require_relative 'route'
 require_relative 'train'
-
+require_relative 'passenger_train'
+require_relative 'cargo_train'
 
 station_1 = Station.new("Ussuriysk")
 station_2 = Station.new("Vladivostok")
@@ -18,7 +19,7 @@ route_1.delete_station(station_3)
 route_1.delete_station(station_3)
 route_1.get_route_list
 
-train1 = Train.new("Y-150", "passenger", 10)
+train1 = PassengerTrain.new("Y-150", 10)
 
 train1.add_wagon
 train1.length
@@ -47,16 +48,16 @@ train1.go_back
 train1.go_back
 train1.go_back
 
-train2 = Train.new("S-1", "passenger", 10)
+train2 = PassengerTrain.new("S-1", 10)
 train2.set_route(route_1)
 
-train3 = Train.new("Y-200", "passenger", 10)
+train3 = PassengerTrain.new("Y-200", 10)
 train3.set_route(route_1)
 
-train4 = Train.new("G-010", "cargo", 10)
+train4 = CargoTrain.new("G-010", 10)
 train4.set_route(route_1)
 
-train5 = Train.new("G-010", "cargo", 10)
+train5 = CargoTrain.new("G-010", 10)
 train5.set_route(route_1)
 
 puts station_1.get_train_list("passenger")

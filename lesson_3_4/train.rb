@@ -3,9 +3,9 @@ class Train
   attr_accessor :speed 
   attr_reader :number
  
-  def initialize(number, amp_wagons = 0)
+  def initialize(number)
     @number = number
-    @amp_wagons = amp_wagons
+    @amp_wagons = []
     @speed = 0  
   end
 
@@ -14,15 +14,15 @@ class Train
   end
   
   def length
-    puts "Train's lenght #{@amp_wagons} wagons"
+    puts "Train's lenght #{@amp_wagons.length} wagons"
   end
   
-  def add_wagon 
-     @amp_wagons += 1 if @speed == 0 
+  def add_wagon(wagon) 
+     @amp_wagons << wagon if @speed == 0 
   end    
 
   def remove_wagon 
-     @amp_wagons -= 1 if @amp_wagons != 0 && @speed == 0
+     @amp_wagons.pop if @amp_wagons.length != 0 && @speed == 0
   end
 
   def set_route(route)

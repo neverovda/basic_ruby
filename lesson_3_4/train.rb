@@ -30,21 +30,6 @@ class Train
     set_station(@route.stations[0])
   end
 
-  def set_station(station)
-     @current_station.departure(self) if @current_station
-     @current_station = station
-     @current_station.arrival(self)
-     @index_station = @route.stations.index(@current_station)
-  end
-
-  def first_station? 
-    @index_station == 0
-  end
-
-  def last_station? 
-    @index_station == @route.stations.length - 1
-  end 
-
   def go_back
     set_station(@route.stations[@index_station - 1]) if !first_station? 
   end
@@ -58,5 +43,27 @@ class Train
     puts "Current station: #{@current_station.name}"
     puts "Next station: #{@route.stations[@index_station + 1].name}" if !last_station?  
   end
+
+  protected
+  # в protected так как напрямую станция не устанавливается, либо при перемещение, либо при установке маршрута
+  # наслудуется в дочерние классы поездов
+  def set_station(station)
+     @current_station.departure(self) if @current_station
+     @current_station = station
+     @current_station.arrival(self)
+     @index_station = @route.stations.index(@current_station)
+  end
+
+  # в protected так как вспомогательный метод для движения, и вывода сообщения
+  # наслудуется в дочерние классы поездов
+  def first_station? 
+    @index_station == 0
+  end
+
+  # в protected так как вспомогательный метод для движения, и вывода сообщения
+  # наслудуется в дочерние классы поездов
+  def last_station? 
+    @index_station == @route.stations.length - 1
+  end 
 
 end

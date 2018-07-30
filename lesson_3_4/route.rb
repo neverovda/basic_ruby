@@ -4,8 +4,7 @@ class Route
 
   def initialize(name ,f_station, l_station)
     @name = name
-    @stations = [f_station, l_station]
-    puts "Route #{@name} created:"    
+    @stations = [f_station, l_station]        
   end
 
   def add_station(station)

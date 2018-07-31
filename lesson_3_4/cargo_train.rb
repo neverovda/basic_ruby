@@ -9,7 +9,7 @@ class CargoTrain < Train
   end  
 
   def type
-    "cargo"
+    :cargo
   end
 
 end  

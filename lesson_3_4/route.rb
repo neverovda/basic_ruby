@@ -1,6 +1,6 @@
 class Route
   
-  attr_reader :stations
+  attr_reader :stations, :name
 
   def initialize(name ,f_station, l_station)
     @name = name
@@ -9,14 +9,18 @@ class Route
 
   def add_station(station)
     @stations.insert(-2, station)
-    puts "#{station.name} added to route #{@name}."    
+    station    
   end
 
   def delete_station(station)
     if (station != @stations.first || station != @stations.last) 
-      del_station = @stations.delete(station)
-      puts "#{station.name} deleted from route #{@name}." if del_station  
+      del_station = @stations.delete(station)        
     end
+  end
+
+  def get_intermediate_stations
+    amt = @stations.length - 2
+    @stations.slice(1, amt) || []  
   end
 
   def get_route_list

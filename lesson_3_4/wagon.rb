@@ -1,10 +1,13 @@
 class Wagon
+
+  attr_reader :name
   
-  def initialize
+  def initialize(name)
+    @name = name
     @free = true    
   end
 
-  def use
+  def use!
     @free = false 
   end
 
@@ -13,7 +16,7 @@ class Wagon
   end
 
   def free?
-    @used
+    @free
   end   
 
 end  

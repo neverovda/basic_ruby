@@ -1,10 +1,10 @@
 class Train
   
   attr_accessor :speed 
-  attr_reader :number
+  attr_reader :name
  
-  def initialize(number)
-    @number = number
+  def initialize(name)
+    @name = name
     @amp_wagons = []
     @speed = 0  
   end
@@ -17,8 +17,12 @@ class Train
     puts "Train's lenght #{@amp_wagons.length} wagons"
   end
   
-  def add_wagon(wagon) 
-     @amp_wagons << wagon if @speed == 0 
+  def add_wagon(wagon)
+    if @speed == 0 
+      wagon.use!
+      @amp_wagons << wagon
+      wagon
+    end
   end    
 
   def remove_wagon 

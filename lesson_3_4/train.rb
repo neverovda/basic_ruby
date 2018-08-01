@@ -1,7 +1,7 @@
 class Train
   
   attr_accessor :speed 
-  attr_reader :name
+  attr_reader :name, :type
  
   def initialize(name)
     @name = name
@@ -18,11 +18,19 @@ class Train
   end
   
   def add_wagon(wagon)
-    if @speed == 0 
+    if @speed == 0 && wagon_type_check(wagon)
       wagon.use!
       @amp_wagons << wagon
       wagon
     end
+  end
+
+  def wagon_type_check(wagon)
+    if @type != wagon.type
+      puts "This wagon is not #{@type.to_s}"
+    else 
+      true
+    end     
   end    
 
   def remove_wagon 

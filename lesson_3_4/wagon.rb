@@ -1,6 +1,6 @@
 class Wagon
 
-  attr_reader :name
+  attr_reader :name, :type
   
   def initialize(name)
     @name = name

@@ -1,5 +1,6 @@
 class CargoWagon < Wagon
-  def type 
-    "cargo"
+  def initialize(name)  
+    super(name)
+    @type = :cargo
   end  
 end 

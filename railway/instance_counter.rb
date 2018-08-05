@@ -1,12 +1,12 @@
-module InstaneCounter
+module InstanceCounter
   
   module ClassMethods
     
-    attr_accessor :instane_counter
+    attr_accessor :instance_counter
 
     def instances
-      @instane_counter ||= 0
-      @instane_counter
+      @instance_counter ||= 0
+      @instance_counter
     end
 
   end
@@ -16,8 +16,8 @@ module InstaneCounter
     protected
    
     def register_instance
-      self.class.instane_counter ||= 0
-      self.class.instane_counter += 1  
+      self.class.instance_counter ||= 0
+      self.class.instance_counter += 1  
     end 
   end
   

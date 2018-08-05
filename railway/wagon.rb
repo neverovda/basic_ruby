@@ -1,7 +1,7 @@
 class Wagon
 
   include Manufacturer
-  include InstaneCounter
+  include InstanceCounter
 
   attr_reader :number, :type
 

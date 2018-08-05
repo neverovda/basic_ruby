@@ -1,7 +1,7 @@
 class Train
   
   include Manufacturer
-  include InstaneCounter
+  include InstanceCounter
 
   attr_accessor :speed 
   attr_reader :number, :type
@@ -15,7 +15,7 @@ class Train
     end
 
     def all
-      @@trains.to_a.map { |arr| arr[1]}    
+      @@trains.values    
     end
 
   end  

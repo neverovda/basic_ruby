@@ -1,6 +1,6 @@
 class Station
 
-  include InstaneCounter
+  include InstanceCounter
 
   attr_reader :name
 

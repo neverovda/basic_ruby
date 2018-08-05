@@ -1,12 +1,32 @@
 class Train
   
+  include Manufacturer
+  include InstaneCounter
+
   attr_accessor :speed 
-  attr_reader :name, :type
+  attr_reader :number, :type
+
+  @@trains = {}
+
+  class << self
+    
+    def find(number)
+      @@trains[number]
+    end
+
+    def all
+      @@trains.to_a.map { |arr| arr[1]}    
+    end
+
+  end  
  
-  def initialize(name)
-    @name = name
+  def initialize(number, manufacture_name)
+    @number = number
     @amp_wagons = []
-    @speed = 0  
+    @speed = 0
+    set_manufacturer(manufacture_name)
+    @@trains[number] = self
+    register_instance  
   end
 
   def stop

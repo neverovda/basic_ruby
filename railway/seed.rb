@@ -1,25 +1,26 @@
-def seed(railway)
-    
-  railway.stations << Station.new("Ussuriysk")
-  railway.stations << Station.new("Vladivostok")
-  railway.stations << Station.new("Bolshoy Kamen")
-  railway.stations << Station.new("Nakhodka")
+def seed
 
-  railway.routes << Route.new("Traveling by Primorye", railway.stations.first, railway.stations.last)
+  Station.new("Ussuriysk")
+  Station.new("Vladivostok")
+  Station.new("Bolshoy Kamen")
+  Station.new("Nakhodka")
 
-  railway.wagons << CargoWagon.new("C-1")
-  railway.wagons << CargoWagon.new("C-2")
-  railway.wagons << CargoWagon.new("C-3")
+  Route.new("Traveling by Primorye", Station.all.first, Station.all.last)
 
-  railway.wagons << PassengerWagon.new("P-1")
-  railway.wagons << PassengerWagon.new("P-1")
-  railway.wagons << PassengerWagon.new("P-1")
+  CargoWagon.new("C-1", Manufacturer::MANUFACTURERS[2])
+  CargoWagon.new("C-2", Manufacturer::MANUFACTURERS[2])
+  CargoWagon.new("C-3", Manufacturer::MANUFACTURERS[0])
+
+  PassengerWagon.new("P-1", Manufacturer::MANUFACTURERS[2])
+  PassengerWagon.new("P-2", Manufacturer::MANUFACTURERS[2])
+  PassengerWagon.new("P-3", Manufacturer::MANUFACTURERS[1])
 
 
-  railway.trains << PassengerTrain.new("PT-150")
-  railway.trains << PassengerTrain.new("PT-1")
-  railway.trains << PassengerTrain.new("PT-200")
-  railway.trains << CargoTrain.new("CT-010")
-  railway.trains << CargoTrain.new("CT-010")
+  PassengerTrain.new("PT-150", Manufacturer::MANUFACTURERS[2])
+  PassengerTrain.new("PT-1", Manufacturer::MANUFACTURERS[2])
+  PassengerTrain.new("PT-200", Manufacturer::MANUFACTURERS[0])
+  
+  CargoTrain.new("CT-010", Manufacturer::MANUFACTURERS[2])
+  CargoTrain.new("CT-210", Manufacturer::MANUFACTURERS[1])
 
 end

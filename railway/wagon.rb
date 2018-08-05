@@ -1,10 +1,24 @@
 class Wagon
 
-  attr_reader :name, :type
+  include Manufacturer
+  include InstaneCounter
+
+  attr_reader :number, :type
+
+  @@wagons = []
+
+  class << self
+    def all
+      @@wagons
+    end    
+  end  
   
-  def initialize(name)
-    @name = name
-    @free = true    
+  def initialize(number, manufacture_name)
+    @number = number
+    @free = true
+    set_manufacturer(manufacture_name)
+    @@wagons << self
+    register_instance   
   end
 
   def use!
@@ -17,6 +31,6 @@ class Wagon
 
   def free?
     @free
-  end   
+  end
 
 end  

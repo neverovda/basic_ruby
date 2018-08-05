@@ -1,20 +1,38 @@
 class Station
 
+  include InstaneCounter
+
   attr_reader :name
+
+  @@stations = []
+
+  class << self
+    
+    def all
+      @@stations
+    end
+    
+    def enough_stations?
+    @@stations.length > 1
+    end
+
+  end  
 
   def initialize(name)
     @name = name
     @trains = []
-    puts "Station: #{@name} created"    
+    @@stations << self
+    puts "Station: #{@name} created"
+    register_instance    
   end
 
   def arrival(train)
     @trains << train
-    puts "The train number: #{train.name} came to the station #{@name}."
+    puts "The train number: #{train.number} came to the station #{@name}."
   end
 
   def departure(train)
-    puts "The train number: #{train.name} departed from station: #{@name}." if @trains.include?(train)
+    puts "The train number: #{train.number} departed from station: #{@name}." if @trains.include?(train)
     @trains.delete(train)
   end
 

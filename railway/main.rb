@@ -1,20 +1,20 @@
+require_relative 'instane_counter'
 require_relative 'station'
 require_relative 'route'
+require_relative 'manufacturer'
 require_relative 'train'
 require_relative 'passenger_train'
 require_relative 'cargo_train'
 require_relative 'wagon'
 require_relative 'passenger_wagon'
 require_relative 'cargo_wagon'
-require_relative 'railway'
 #require_relative 'seed'
 
 class TextInterface
 
-  def initialize
-    @rail_way = Railway.new
-    #seed(@rail_way)
-  end
+  # def initialize
+  #   seed
+  # end
 
   def main_menu
     
@@ -86,14 +86,18 @@ class TextInterface
     gets.chomp
   end
 
+  def enter_number
+    puts "Enter number"
+    gets.chomp
+  end
+
   def make_station
-    @rail_way.stations << Station.new(enter_name)
-    puts "Route #{@rail_way.stations.last.name} created:"
+    puts "Route #{Station.all.last.name} created:"
   end
 
   def make_route
-    if @rail_way.enough_station?
-      @rail_way.routes << Route.new(enter_name, selection(@rail_way.stations, "firts station"), selection(@rail_way.stations, "last station"))
+    if Station.enough_stations?
+      Route.new(enter_name, selection(Station.all, "firts station"), selection(Station.all, "last station"))
     else 
       puts "Stations must be at least two"
     end       
@@ -101,15 +105,15 @@ class TextInterface
 
   def make_train
     type = choose_type
-    @rail_way.trains << CargoTrain.new(enter_name) if type == :cargo
-    @rail_way.trains << PassengerTrain.new(enter_name) if type == :passenger
-    puts "Train number: #{@rail_way.trains.last.number} created" 
+    CargoTrain.new(*set_number_and_manufacturer) if type == :cargo
+    PassengerTrain.new(*set_number_and_manufacturer) if type == :passenger
+    puts "Train created" 
   end
 
    def make_wagon
     type = choose_type
-    @rail_way.wagons << CargoWagon.new if type == :cargo
-    @rail_way.wagons << PassengerWagon.new if type == :passenger
+    CargoWagon.new(*set_number_and_manufacturer) if type == :cargo
+    PassengerWagon.new(*set_number_and_manufacturer) if type == :passenger
     puts "Wagon created" 
   end
 
@@ -120,7 +124,11 @@ class TextInterface
     number = get_selection_number
     return :cargo if number == 1
     return :passenger if number == 2 
-  end  
+  end
+
+  def set_number_and_manufacturer
+    [enter_number, selection(Manufacturer::MANUFACTURERS, "manufacturer")]
+  end    
 
   def selection(arr, text)
     
@@ -129,7 +137,7 @@ class TextInterface
     
     i = 1
     arr.each {|item| 
-      puts "#{i}. #{item.name}"
+      puts "#{i}. #{type_of_info(item)}"
       i += 1
     }
 
@@ -139,8 +147,14 @@ class TextInterface
 
   end
 
+  def type_of_info(obj)
+    return obj.name if obj.instance_variables.include?(:@name)
+    return obj.number if obj.instance_variables.include?(:@number)
+    return obj
+  end  
+
   def manage_route
-    rout = selection(@rail_way.routes, "route")
+    rout = selection(Route.all, "route")
 
     while rout do
       explanation
@@ -160,7 +174,7 @@ class TextInterface
   end
 
   def add_station(rout)
-    station = rout.add_station(selection(@rail_way.stations, "station"))
+    station = rout.add_station(selection(Station.all, "station"))
     puts "#{station.name} added to route #{@name}."
   end
 
@@ -170,7 +184,7 @@ class TextInterface
   end
 
   def manage_train
-    train = selection(@rail_way.trains, "train")
+    train = selection(Train.all, "train")
 
     while train do
       explanation
@@ -199,21 +213,21 @@ class TextInterface
   end
 
   def assign_route(train)
-    train.set_route(selection(@rail_way.routes, "route"))
+    train.set_route(selection(Route.all, "route"))
   end
 
   def add_wagon(train)
-    wagon = train.add_wagon(selection(@rail_way.wagons.select {|wagon| wagon.free?}, "wagon"))
-    puts "#{wagon.name} added" if wagon  
+    wagon = train.add_wagon(selection(Wagon.all {|wagon| wagon.free?}, "wagon"))
+    puts "#{wagon.number} added" if wagon  
   end
 
   def delete_wagon(train)
     wagon = train.remove_wagon
-    puts "#{wagon.name} deleted" if wagon  
+    puts "#{wagon.number} deleted" if wagon  
   end
   
   def get_info
-    station = selection(@rail_way.stations, "station")
+    station = selection(Station.all, "station")
 
     while station do
       explanation
@@ -235,7 +249,7 @@ class TextInterface
   end
 
   def print_trains(trains)
-    trains.each {|train| puts train.name}    
+    trains.each {|train| puts train.number + ' | ' +  train.manufacturer_name}    
   end 
 
 

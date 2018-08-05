@@ -1,6 +1,6 @@
 class PassengerWagon < Wagon
-  def initialize(name) 
-    super(name)
+  def initialize(number, manufacture_name) 
+    super(number, manufacture_name)
     @type= :passenger
   end
 end

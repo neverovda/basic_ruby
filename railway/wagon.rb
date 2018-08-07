@@ -2,8 +2,11 @@ class Wagon
 
   include Manufacturer
   include InstanceCounter
+  include Validation
 
   attr_reader :number, :type
+
+  NUMBER_FORMAT = /^(C|P)-\d+/
 
   @@wagons = []
 
@@ -17,6 +20,7 @@ class Wagon
     @number = number
     @free = true
     set_manufacturer(manufacture_name)
+    validate!
     @@wagons << self
     register_instance   
   end

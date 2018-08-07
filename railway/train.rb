@@ -2,9 +2,12 @@ class Train
   
   include Manufacturer
   include InstanceCounter
+  include Validation
 
   attr_accessor :speed 
-  attr_reader :number, :type
+  attr_reader :number, :type, :current_station
+
+  NUMBER_FORMAT = /^[a-z0-9]{3}-{0,1}[a-z0-9]{2}$/i
 
   @@trains = {}
 
@@ -25,6 +28,7 @@ class Train
     @amp_wagons = []
     @speed = 0
     set_manufacturer(manufacture_name)
+    validate!
     @@trains[number] = self
     register_instance  
   end
@@ -34,23 +38,20 @@ class Train
   end
   
   def length
-    puts "Train's lenght #{@amp_wagons.length} wagons"
+    @amp_wagons.length
   end
   
   def add_wagon(wagon)
-    if @speed == 0 && wagon_type_check(wagon)
-      wagon.use!
-      @amp_wagons << wagon
-      wagon
-    end
+    check_addition(wagon)
+    wagon.use!
+    @amp_wagons << wagon
+    wagon
   end
 
-  def wagon_type_check(wagon)
-    if @type != wagon.type
-      puts "This wagon is not #{@type.to_s}"
-    else 
-      true
-    end     
+  def check_addition(wagon)
+    raise "The train is moving !!!" if @speed != 0
+    raise "This wagon is not #{@type.to_s}" if @type != wagon.type 
+    true     
   end    
 
   def remove_wagon 
@@ -77,8 +78,7 @@ class Train
   end
 
   protected
-  # в protected так как напрямую станция не устанавливается, либо при перемещение, либо при установке маршрута
-  # наслудуется в дочерние классы поездов
+ 
   def set_station(station)
      @current_station.departure(self) if @current_station
      @current_station = station
@@ -86,14 +86,10 @@ class Train
      @index_station = @route.stations.index(@current_station)
   end
 
-  # в protected так как вспомогательный метод для движения, и вывода сообщения
-  # наслудуется в дочерние классы поездов
   def first_station? 
     @index_station == 0
   end
 
-  # в protected так как вспомогательный метод для движения, и вывода сообщения
-  # наслудуется в дочерние классы поездов
   def last_station? 
     @index_station == @route.stations.length - 1
   end 

@@ -1,8 +1,11 @@
 class Station
 
   include InstanceCounter
+  include Validation
 
   attr_reader :name
+
+  MIN_NAME_LENGHT = 6
 
   @@stations = []
 
@@ -20,19 +23,17 @@ class Station
 
   def initialize(name)
     @name = name
+    validate!
     @trains = []
     @@stations << self
-    puts "Station: #{@name} created"
     register_instance    
   end
 
   def arrival(train)
     @trains << train
-    puts "The train number: #{train.number} came to the station #{@name}."
   end
 
   def departure(train)
-    puts "The train number: #{train.number} departed from station: #{@name}." if @trains.include?(train)
     @trains.delete(train)
   end
 

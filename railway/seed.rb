@@ -16,11 +16,11 @@ def seed
   PassengerWagon.new("P-3", Manufacturer::MANUFACTURERS[1])
 
 
-  PassengerTrain.new("PT-150", Manufacturer::MANUFACTURERS[2])
-  PassengerTrain.new("PT-1", Manufacturer::MANUFACTURERS[2])
-  PassengerTrain.new("PT-200", Manufacturer::MANUFACTURERS[0])
+  PassengerTrain.new("PT2-15", Manufacturer::MANUFACTURERS[2])
+  PassengerTrain.new("PT2-10", Manufacturer::MANUFACTURERS[2])
+  PassengerTrain.new("PT2-20", Manufacturer::MANUFACTURERS[0])
   
-  CargoTrain.new("CT-010", Manufacturer::MANUFACTURERS[2])
-  CargoTrain.new("CT-210", Manufacturer::MANUFACTURERS[1])
+  CargoTrain.new("CT8-01", Manufacturer::MANUFACTURERS[2])
+  CargoTrain.new("CT3-21", Manufacturer::MANUFACTURERS[1])
 
 end

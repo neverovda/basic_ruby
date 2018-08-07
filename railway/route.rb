@@ -1,8 +1,11 @@
 class Route
 
   include InstanceCounter
+  include Validation
   
   attr_reader :stations, :name
+
+  MIN_NAME_LENGHT = 10
 
   @@routes = []
 
@@ -14,6 +17,7 @@ class Route
 
   def initialize(name ,f_station, l_station)
     @name = name
+    validate!
     @stations = [f_station, l_station]
     @@routes << self
     register_instance        

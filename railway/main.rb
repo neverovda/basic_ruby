@@ -1,4 +1,5 @@
 require_relative 'instance_counter'
+require_relative 'validation'
 require_relative 'station'
 require_relative 'route'
 require_relative 'manufacturer'
@@ -8,13 +9,13 @@ require_relative 'cargo_train'
 require_relative 'wagon'
 require_relative 'passenger_wagon'
 require_relative 'cargo_wagon'
-#require_relative 'seed'
+require_relative 'seed'
 
 class TextInterface
 
-  # def initialize
-  #   seed
-  # end
+  def initialize
+    seed
+  end
 
   def main_menu
     
@@ -44,34 +45,38 @@ class TextInterface
   end   
 
   def create_objects 
-    
     loop do
-    
-      explanation
-      puts "1. Create a station"
-      puts "2. Create a route"
-      puts "3. Create a train"
-      puts "4. Create a wagon"
-      puts "0. Return"
-
-      case get_selection_number
-      when 1
-        make_station  
-      when 2
-        make_route
-      when 3
-        make_train
-      when 4
-        make_wagon
-      when 0
-        break    
-      end
-
+      begin
+        break if attempt_to_create == 0 
+        rescue RuntimeError => e
+        puts e.message
+        puts "Try again" 
+      end 
     end
-
   end
 
-  # private  
+  def attempt_to_create
+    explanation
+    puts "1. Create a station"
+    puts "2. Create a route"
+    puts "3. Create a train"
+    puts "4. Create a wagon"
+    puts "0. Return"
+
+    case get_selection_number
+    when 1
+      make_station  
+    when 2
+      make_route
+    when 3
+      make_train
+    when 4
+      make_wagon
+    when 0
+      return 0     
+    end
+  end  
+    
 
   def explanation
     puts "<<< Enter the number of the item >>>"
@@ -92,7 +97,8 @@ class TextInterface
   end
 
   def make_station
-    puts "Route #{Station.all.last.name} created:"
+    name = Station.new(enter_name).name
+    puts "Station: #{name} created"
   end
 
   def make_route
@@ -107,10 +113,10 @@ class TextInterface
     type = choose_type
     CargoTrain.new(*set_number_and_manufacturer) if type == :cargo
     PassengerTrain.new(*set_number_and_manufacturer) if type == :passenger
-    puts "Train created" 
+    puts "Train created"
   end
 
-   def make_wagon
+  def make_wagon
     type = choose_type
     CargoWagon.new(*set_number_and_manufacturer) if type == :cargo
     PassengerWagon.new(*set_number_and_manufacturer) if type == :passenger
@@ -199,18 +205,29 @@ class TextInterface
       when 1
         assign_route(train)  
       when 2
-        add_wagon(train)
+        begin
+          add_wagon(train)
+          rescue RuntimeError => e
+          puts e.message
+          puts "Try again"
+        end 
       when 3
         delete_wagon(train)  
       when 4
         train.go_forth
+        message_of_arrival(train)
       when 5
-        train.go_back 
+        train.go_back
+        message_of_arrival(train) 
       when 0
         break    
       end
     end
   end
+
+  def message_of_arrival(train)
+    puts "The train came to the station #{train.current_station.name}."
+  end  
 
   def assign_route(train)
     train.set_route(selection(Route.all, "route"))

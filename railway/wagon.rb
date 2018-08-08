@@ -37,4 +37,16 @@ class Wagon
     @free
   end
 
+  protected
+
+   def validate!
+    raise "Number can't be nil." if number.nil?
+    raise "Number has invalid format." if number !~ NUMBER_FORMAT
+    raise "Name manufacturer's can't be nil." if manufacturer.nil?
+    if manufacturer.length < Manufacturer::MIN_NAME_MANUFACTURERS 
+      raise "Name manufacturer's should be at least #{Manufacturer::MIN_NAME_MANUFACTURERS} symbols."    
+    end
+    true 
+  end
+
 end  

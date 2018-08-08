@@ -43,6 +43,14 @@ class Station
     puts "Station: #{@name} Train list:"
     puts "Type of trains is #{type_string}" if type != :all 
     @trains.select { |train| type == :all || train.type == type } 
+  end
+  
+  protected
+
+  def validate!
+    raise "Name can't be nil." if name.nil?
+    raise "Name should be at least #{MIN_NAME_LENGHT} symbols" if name.length < MIN_NAME_LENGHT
+    true 
   end       
 
 end

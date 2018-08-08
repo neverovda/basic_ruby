@@ -47,7 +47,7 @@ class TextInterface
   def create_objects 
     loop do
       begin
-        break if attempt_to_create == 0 
+        break if attempt_to_create == "exit from menu" 
         rescue RuntimeError => e
         puts e.message
         puts "Try again" 
@@ -73,7 +73,7 @@ class TextInterface
     when 4
       make_wagon
     when 0
-      return 0     
+      return "exit from menu"     
     end
   end  
     
@@ -268,7 +268,6 @@ class TextInterface
   def print_trains(trains)
     trains.each {|train| puts train.number + ' | ' +  train.manufacturer_name}    
   end 
-
 
 end 
 

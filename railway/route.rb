@@ -17,8 +17,8 @@ class Route
 
   def initialize(name ,f_station, l_station)
     @name = name
-    validate!
     @stations = [f_station, l_station]
+    validate!
     @@routes << self
     register_instance        
   end
@@ -43,5 +43,25 @@ class Route
     puts "Route #{@name} list:"
     @stations.each { |station| puts station.name }
   end
+  
+  protected
+
+  def validate!
+    raise "Name can't be nil." if name.nil?
+    raise "Name should be at least #{MIN_NAME_LENGHT} symbols." if name.length < MIN_NAME_LENGHT
+    raise "On the route, not only stations." unless correspond_to_class?
+    true 
+  end
+
+  def correspond_to_class?
+    aptness = true
+    @stations.each {|station|
+      if station.class != Station 
+        aptness = false 
+        break
+      end  
+    }
+    aptness
+  end  
 
 end

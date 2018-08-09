@@ -4,7 +4,7 @@ class Wagon
   include InstanceCounter
   include Validation
 
-  attr_reader :number, :type
+  attr_reader :number, :type, :current_train
 
   NUMBER_FORMAT = /^(C|P)-\d+/
 
@@ -25,16 +25,23 @@ class Wagon
     register_instance   
   end
 
-  def use!
+  def use!(train)
+    @current_train = train
     @free = false 
   end
 
   def set_free
+    @current_train = nil
     @free = true 
   end
 
   def free?
     @free
+  end
+
+  def is_moving?
+    return false if free?
+    @current_train.speed != 0     
   end
 
   protected

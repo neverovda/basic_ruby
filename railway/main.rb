@@ -13,10 +13,6 @@ require_relative 'seed'
 
 class TextInterface
 
-  def initialize
-    seed
-  end
-
   def main_menu
     
     loop do
@@ -24,7 +20,8 @@ class TextInterface
       puts "1. Create an object (station, route, train, wagon)"
       puts "2. Manage a route"
       puts "3. Manage a train"
-      puts "4. Information about trains on stations"
+      puts "4. Manage a wagon"
+      puts "5. Information"
       puts "0. Exit"
       
       case get_selection_number
@@ -34,7 +31,9 @@ class TextInterface
         manage_route        
       when 3
         manage_train
-      when 4  
+      when 4
+        manage_wagon
+      when 5  
         get_info
       when 0
         puts "Goodbay!"
@@ -118,8 +117,8 @@ class TextInterface
 
   def make_wagon
     type = choose_type
-    CargoWagon.new(*set_number_and_manufacturer) if type == :cargo
-    PassengerWagon.new(*set_number_and_manufacturer) if type == :passenger
+    CargoWagon.new(*set_number_and_manufacturer, enter_amt) if type == :cargo
+    PassengerWagon.new(*set_number_and_manufacturer, enter_amt_seats) if type == :passenger
     puts "Wagon created" 
   end
 
@@ -134,7 +133,17 @@ class TextInterface
 
   def set_number_and_manufacturer
     [enter_number, selection(Manufacturer::MANUFACTURERS, "manufacturer")]
-  end    
+  end
+
+  def enter_amt_seats
+    puts "Enter amount seats"
+    gets.chomp.to_i
+  end
+
+  def enter_amt
+    puts "Enter max amount"
+    gets.chomp.to_f
+  end      
 
   def selection(arr, text)
     
@@ -244,6 +253,41 @@ class TextInterface
   end
   
   def get_info
+    loop do
+      explanation
+      puts "1. List of trains (number, type, length)"
+      puts "2. List of trains (by type with manufacturer)"
+      puts "3. list of wagons"
+      puts "0. Exit"
+      
+      case get_selection_number
+      when 1
+        list_of_trains
+      when 2
+        list_of_trains_by_type  
+      when 3
+        list_of_wagons        
+      when 0
+        break
+      end
+
+    end
+  end
+
+  def list_of_trains
+    station = selection(Station.all, "station")
+    station.each_train { |train| puts "#{train.number} #{train.type.to_s} #{train.wagons.length}"}          
+  end
+
+  def list_of_wagons
+    train = selection(Train.all, "train")
+    train.each_wagon do |wagon| 
+      puts "#{wagon.number} amount: #{wagon.amount} free amount: #{wagon.free_amount}" if wagon.type == :cargo
+      puts "#{wagon.number} amount seats: #{wagon.amt_seats} free seats: #{wagon.amt_free_seats}" if wagon.type == :passenger
+    end    
+  end      
+
+  def list_of_trains_by_type
     station = selection(Station.all, "station")
 
     while station do
@@ -267,9 +311,52 @@ class TextInterface
 
   def print_trains(trains)
     trains.each {|train| puts train.number + ' | ' +  train.manufacturer_name}    
+  end
+
+  def manage_wagon
+    manage_wagon_attempt
+    rescue RuntimeError => e
+    puts e.message
+    puts "Try again"
+  end
+
+  def manage_wagon_attempt
+    wagon = selection(Wagon.all, "wagon")  
+    while wagon do
+      explanation
+      puts "1. Add passenger"
+      puts "2. Add cargo"
+      puts "0. Return"
+      case get_selection_number
+      when 1
+        add_passenger(wagon)  
+      when 2
+        add_cargo(wagon) 
+      when 0
+        break    
+      end
+    end  
+  end
+
+  def add_passenger(wagon)
+    if wagon.type != :passenger
+      puts "This is not a passenger wagon"
+      return
+    end   
+    wagon.occupate_seat
+  end
+
+  def add_cargo(wagon)
+    if wagon.type != :cargo
+      puts "This is not a cargo wagon"
+      return
+    end
+    puts "Enter amount of cargo"
+    wagon.fill(gets.chomp.to_f) 
   end 
 
-end 
+end
 
+seed
 text_interface = TextInterface.new
 text_interface.main_menu

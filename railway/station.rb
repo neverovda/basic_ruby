@@ -44,6 +44,10 @@ class Station
     puts "Type of trains is #{type_string}" if type != :all 
     @trains.select { |train| type == :all || train.type == type } 
   end
+
+  def each_train
+    @trains.each {|train| yield(train) }
+  end
   
   protected
 

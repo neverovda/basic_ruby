@@ -54,14 +54,7 @@ class Route
   end
 
   def correspond_to_class?
-    aptness = true
-    @stations.each {|station|
-      if station.class != Station 
-        aptness = false 
-        break
-      end  
-    }
-    aptness
+    @stations.all? { |station| station.is_a? Station }
   end  
 
 end

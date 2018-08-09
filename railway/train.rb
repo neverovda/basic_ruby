@@ -43,7 +43,7 @@ class Train
   
   def add_wagon(wagon)
     check_addition(wagon)
-    wagon.use!
+    wagon.use!(self)
     @wagons << wagon
     wagon
   end
@@ -71,6 +71,10 @@ class Train
     puts "Next station: #{@route.stations[@index_station + 1].name}" if !last_station?  
   end
 
+  def each_wagon
+    @wagons.each {|wagon| yield(wagon) }
+  end
+
   protected
 
    def validate!
@@ -86,25 +90,11 @@ class Train
   end
 
   def correspond_to_class?
-    aptness = true
-    @wagons.each {|wagon|
-      if !(wagon.class == Wagon || wagon.class.superclass == Wagon) 
-        aptness = false 
-        break
-      end  
-     }
-    aptness
+    @wagons.all? { |wagon| wagon.is_a? Wagon }
   end
 
   def correspond_to_type?
-    aptness = true
-    @wagons.each {|wagon|
-      if wagon.type != @type 
-        aptness = false 
-        break
-      end
-     }
-    aptness    
+    @wagons.all? { |wagon| wagon.type == @type }
   end
 
   def check_addition(wagon)

@@ -36,7 +36,7 @@ class Route
     @stations.slice(1, amt) || []
   end
 
-  def get_route_list
+  def route_list
     puts "Route #{@name} list:"
     @stations.each { |station| puts station.name }
   end

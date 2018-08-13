@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+    - 'lib/seed.rb'
+
 Metrics/LineLength:
   Max: 120
 

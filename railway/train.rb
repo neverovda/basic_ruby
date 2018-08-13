@@ -62,12 +62,6 @@ class Train
     self.station = @route.stations[@index_station + 1] unless last_station?
   end
 
-  def messege_for_passegers
-    puts "Previous station #{@route.stations[@index_station - 1].name}" unless first_station?
-    puts "Current station: #{@current_station.name}"
-    puts "Next station: #{@route.stations[@index_station + 1].name}" unless last_station?
-  end
-
   def each_wagon
     @wagons.each { |wagon| yield(wagon) }
   end
@@ -88,9 +82,12 @@ class Train
 
   def validate_manufacturer
     raise "Name manufacturer's can't be nil." if manufacturer.nil?
-    if manufacturer.length < Manufacturer::MIN_NAME_MANUFACTURERS
-      raise "Name manufacturer's should be at least #{Manufacturer::MIN_NAME_MANUFACTURERS} symbols."
-    end
+    mnf_length = Manufacturer::MIN_NAME_MANUFACTURERS
+    raise "Name manufacturer's should be at least #{mnf_length} symbols." if short_mnf?
+  end
+
+  def short_mnf?
+    manufacturer.length < Manufacturer::MIN_NAME_MANUFACTURERS
   end
 
   def validate_wagon

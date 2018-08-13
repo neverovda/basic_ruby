@@ -1,5 +1,4 @@
 class Station
-
   include InstanceCounter
   include Validation
 
@@ -10,23 +9,21 @@ class Station
   @@stations = []
 
   class << self
-    
     def all
       @@stations
     end
-    
-    def enough_stations?
-    @@stations.length > 1
-    end
 
-  end  
+    def enough_stations?
+      @@stations.length > 1
+    end
+  end
 
   def initialize(name)
     @name = name
     validate!
     @trains = []
     @@stations << self
-    register_instance    
+    register_instance
   end
 
   def arrival(train)
@@ -37,24 +34,22 @@ class Station
     @trains.delete(train)
   end
 
-  def get_train_list (type)
-    type_string = "passenger" if type == :passenger
-    type_string = "cargo" if type == :cargo
+  def get_train_list(type)
     puts "Station: #{@name} Train list:"
-    puts "Type of trains is #{type_string}" if type != :all 
-    @trains.select { |train| type == :all || train.type == type } 
+    return @trains if type == :all
+    puts "Type of trains is #{type}"
+    @trains.select { |train| train.type == type }
   end
 
   def each_train
-    @trains.each {|train| yield(train) }
+    @trains.each { |train| yield(train) }
   end
-  
+
   protected
 
   def validate!
     raise "Name can't be nil." if name.nil?
     raise "Name should be at least #{MIN_NAME_LENGHT} symbols" if name.length < MIN_NAME_LENGHT
-    true 
-  end       
-
+    true
+  end
 end

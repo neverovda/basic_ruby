@@ -1,8 +1,7 @@
 class Route
-
   include InstanceCounter
   include Validation
-  
+
   attr_reader :stations, :name
 
   MIN_NAME_LENGHT = 10
@@ -12,49 +11,46 @@ class Route
   class << self
     def all
       @@routes
-    end    
-  end  
+    end
+  end
 
-  def initialize(name ,f_station, l_station)
+  def initialize(name, f_station, l_station)
     @name = name
     @stations = [f_station, l_station]
     validate!
     @@routes << self
-    register_instance        
+    register_instance
   end
 
   def add_station(station)
     @stations.insert(-2, station)
-    station    
+    station
   end
 
   def delete_station(station)
-    if (station != @stations.first || station != @stations.last) 
-      del_station = @stations.delete(station)        
-    end
+    @stations.delete(station) unless [@stations.first, @stations.last].include? station
   end
 
-  def get_intermediate_stations
+  def intermediate_stations
     amt = @stations.length - 2
-    @stations.slice(1, amt) || []  
+    @stations.slice(1, amt) || []
   end
 
   def get_route_list
     puts "Route #{@name} list:"
     @stations.each { |station| puts station.name }
   end
-  
+
   protected
 
   def validate!
     raise "Name can't be nil." if name.nil?
     raise "Name should be at least #{MIN_NAME_LENGHT} symbols." if name.length < MIN_NAME_LENGHT
-    raise "On the route, not only stations." unless correspond_to_class?
-    true 
+    raise 'On the route, not only stations.' unless correspond_to_class?
+    true
   end
 
   def correspond_to_class?
     @stations.all? { |station| station.is_a? Station }
-  end  
-
+  end
 end

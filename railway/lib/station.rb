@@ -1,11 +1,11 @@
 class Station
   include InstanceCounter
   include Validation
+  extend Accessors
 
-  attr_reader :name
-
-  MIN_NAME_LENGHT = 6
-
+  attr_accessor_with_history :name, :description
+  validate :name, :presence
+  
   @@stations = []
 
   class << self
@@ -19,7 +19,7 @@ class Station
   end
 
   def initialize(name)
-    @name = name
+    self.name = name
     validate!
     @trains = []
     @@stations << self
@@ -45,11 +45,4 @@ class Station
     @trains.each { |train| yield(train) }
   end
 
-  protected
-
-  def validate!
-    raise "Name can't be nil." if name.nil?
-    raise "Name should be at least #{MIN_NAME_LENGHT} symbols" if name.length < MIN_NAME_LENGHT
-    true
-  end
 end

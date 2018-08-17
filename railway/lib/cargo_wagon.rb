@@ -1,6 +1,11 @@
 class CargoWagon < Wagon
   attr_reader :amount, :occupate_amt
-  NUMBER_FORMAT = /^C-\d+/
+  
+  validate :number, :presence
+  validate :number, :format, /^C-\d+/
+  validate :manufacturer, :presence
+  validate :amount, :presence
+  validate :amount, :type, Numeric
 
   def initialize(number, manufacture_name, amount)
     @type = :cargo
@@ -20,9 +25,4 @@ class CargoWagon < Wagon
     @amount - @occupate_amt
   end
 
-  def validate!
-    raise "Amount can't be nil." if amount.nil?
-    raise 'Amount can be float number.' unless amount.is_a? Numeric
-    super
-  end
 end

@@ -5,8 +5,10 @@ class Train
 
   attr_accessor :speed
   attr_reader :number, :type, :current_station, :wagons
-
-  NUMBER_FORMAT = /^[a-z0-9]{3}-{0,1}[a-z0-9]{2}$/i
+  
+  validate :number, :presence
+  validate :number, :format, /^[a-z0-9]{3}-{0,1}[a-z0-9]{2}$/i
+  validate :manufacturer, :presence
 
   @@trains = {}
 
@@ -66,29 +68,12 @@ class Train
     @wagons.each { |wagon| yield(wagon) }
   end
 
-  protected
-
-  def validate!
-    validate_name
-    validate_manufacturer
+  def valid?
     validate_wagon
-    true
+    super
   end
 
-  def validate_name
-    raise "Number can't be nil." if number.nil?
-    raise 'Number has invalid format.' if number !~ NUMBER_FORMAT
-  end
-
-  def validate_manufacturer
-    raise "Name manufacturer's can't be nil." if manufacturer.nil?
-    mnf_length = Manufacturer::MIN_NAME_MANUFACTURERS
-    raise "Name manufacturer's should be at least #{mnf_length} symbols." if short_mnf?
-  end
-
-  def short_mnf?
-    manufacturer.length < Manufacturer::MIN_NAME_MANUFACTURERS
-  end
+  protected
 
   def validate_wagon
     raise 'As part of the train there is not a wagon.' unless correspond_to_class?

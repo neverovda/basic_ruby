@@ -3,7 +3,8 @@ class MainMenu < BasisMenu
                '2. Manage a route',
                '3. Manage a train',
                '4. Manage a wagon',
-               '5. Information',
+               '5. Manage a station',
+               '6. Information',
                '0. Exit'].freeze
 
   def initialize
@@ -11,7 +12,8 @@ class MainMenu < BasisMenu
                  2 => :manage_route,
                  3 => :manage_train,
                  4 => :manage_wagon,
-                 5 => :info,
+                 5 => :manage_station,
+                 6 => :info,
                  0 => :exit }
 
     execute_menu(TEXT_MENU, commands)
@@ -31,6 +33,10 @@ class MainMenu < BasisMenu
 
   def manage_wagon
     ManageWagonMenu.new
+  end
+
+  def manage_station
+    ManageStationMenu.new
   end
 
   def info

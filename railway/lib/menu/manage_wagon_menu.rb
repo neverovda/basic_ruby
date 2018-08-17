@@ -15,7 +15,7 @@ class ManageWagonMenu < BasisMenu
     execute_menu(TEXT_MENU, commands)
   end
 
-  def add_passenger(_wagon)
+  def add_passenger
     if @wagon.type != :passenger
       puts 'This is not a passenger wagon'
       return
@@ -24,7 +24,7 @@ class ManageWagonMenu < BasisMenu
     puts 'The passenger entered in the wagon'
   end
 
-  def add_cargo(_wagon)
+  def add_cargo
     if @wagon.type != :cargo
       puts 'This is not a cargo wagon'
       return

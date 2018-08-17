@@ -1,5 +1,6 @@
 require_relative 'lib/instance_counter'
 require_relative 'lib/validation'
+require_relative 'lib/accessors'
 require_relative 'lib/station'
 require_relative 'lib/route'
 require_relative 'lib/manufacturer'
@@ -16,7 +17,9 @@ require_relative 'lib/menu/creating_menu'
 require_relative 'lib/menu/manage_route_menu'
 require_relative 'lib/menu/manage_train_menu'
 require_relative 'lib/menu/manage_wagon_menu'
+require_relative 'lib/menu/manage_station_menu'
 require_relative 'lib/menu/info_menu'
 require_relative 'lib/menu/info_detailed_menu'
 
+seed
 MainMenu.new

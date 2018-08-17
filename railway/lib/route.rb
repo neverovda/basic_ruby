@@ -4,7 +4,7 @@ class Route
 
   attr_reader :stations, :name
 
-  MIN_NAME_LENGHT = 10
+  validate :name, :presence
 
   @@routes = []
 
@@ -18,6 +18,7 @@ class Route
     @name = name
     @stations = [f_station, l_station]
     validate!
+    validate_stations!
     @@routes << self
     register_instance
   end
@@ -41,11 +42,14 @@ class Route
     @stations.each { |station| puts station.name }
   end
 
+   def valid?
+    validate_stations!
+    super
+  end
+
   protected
 
-  def validate!
-    raise "Name can't be nil." if name.nil?
-    raise "Name should be at least #{MIN_NAME_LENGHT} symbols." if name.length < MIN_NAME_LENGHT
+  def validate_stations!
     raise 'On the route, not only stations.' unless correspond_to_class?
     true
   end

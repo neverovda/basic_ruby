@@ -5,7 +5,7 @@ class Train
 
   attr_accessor :speed
   attr_reader :number, :type, :current_station, :wagons
-  
+
   validate :number, :presence
   validate :number, :format, /^[a-z0-9]{3}-{0,1}[a-z0-9]{2}$/i
   validate :manufacturer, :presence

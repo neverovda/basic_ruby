@@ -5,7 +5,7 @@ class Station
 
   attr_accessor_with_history :name, :description
   validate :name, :presence
-  
+
   @@stations = []
 
   class << self
@@ -44,5 +44,4 @@ class Station
   def each_train
     @trains.each { |train| yield(train) }
   end
-
 end

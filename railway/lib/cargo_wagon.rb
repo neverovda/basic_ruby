@@ -1,6 +1,6 @@
 class CargoWagon < Wagon
   attr_reader :amount, :occupate_amt
-  
+
   validate :number, :presence
   validate :number, :format, /^C-\d+/
   validate :manufacturer, :presence
@@ -24,5 +24,4 @@ class CargoWagon < Wagon
   def free_amount
     @amount - @occupate_amt
   end
-
 end

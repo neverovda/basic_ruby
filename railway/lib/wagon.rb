@@ -41,5 +41,4 @@ class Wagon
     return false if free?
     @current_train.speed != 0
   end
-  
 end

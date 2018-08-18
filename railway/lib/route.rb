@@ -42,7 +42,7 @@ class Route
     @stations.each { |station| puts station.name }
   end
 
-   def valid?
+  def valid?
     validate_stations!
     super
   end

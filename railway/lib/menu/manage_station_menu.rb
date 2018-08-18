@@ -16,17 +16,16 @@ class ManageStationMenu < BasisMenu
   end
 
   def rename
-    puts "Enter name"
+    puts 'Enter name'
     @station.name = gets.chomp.to_s
-    puts "Enter description"
+    puts 'Enter description'
     @station.description = gets.chomp.to_s
   end
 
   def info
-    puts "History of name"
-    @station.name_history.each {|name| p name}
-    puts "History of description"
-    @station.description_history.each {|descrip| p descrip}
-  end  
-      
+    puts 'History of name'
+    @station.name_history.each { |name| p name }
+    puts 'History of description'
+    @station.description_history.each { |descrip| p descrip }
+  end
 end

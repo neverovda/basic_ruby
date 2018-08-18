@@ -16,9 +16,7 @@ module Accessors
     define_method(name) { instance_variable_get(var_name) }
 
     define_method("#{name}=".to_sym) do |value|
-      unless value.instance_of? type_class
-        raise "The type of the #{name} must be #{type_class}"
-      end
+      raise "The type of the #{name} must be #{type_class}" unless value.instance_of? type_class
       instance_variable_set(var_name, value)
     end
   end

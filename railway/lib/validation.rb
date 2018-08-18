@@ -2,53 +2,41 @@ module Validation
   module ClassMethods
     attr_reader :vld_storage
 
-    def validate(name, type_valid, param = true)
-      var_name = "@#{name}".to_sym
-      init(var_name)
-      @vld_storage[var_name][type_valid] = param
-      make_method_validate
+    def validate(name, type_valid, param = nil)
+      @vld_storage ||= []
+      @vld_storage << { attr: name, type_valid: type_valid, param: param }
+
+      define_method(:validate!) do
+        self.class.vld_storage.each do |item|
+          var_name = "@#{item[:attr]}".to_sym
+          value = instance_variable_get(var_name)
+          name_validation = ('validate_' + item[:type_valid].to_s).to_sym
+          self.class.send(name_validation, item[:attr], value, item[:param])
+        end
+        true
+      end
     end
 
     protected
 
     attr_writer :vld_storage
 
-    def init(var_name)
-      @vld_storage ||= {}
-      @vld_storage[var_name] ||= { presence: false,
-                                   format: false,
-                                   type: false }
-    end
-
-    def make_method_validate
-      define_method(:validate!) do
-        self.class.vld_storage.each do |var_name, params|
-          value = instance_variable_get(var_name)
-          name = var_name.to_s.delete '@'
-          self.class.send(:validate_presence, name, value, params)
-          self.class.send(:validate_format, name, value, params)
-          self.class.send(:validate_type, name, value, params)
-        end
-        true
-      end
-    end
-
-    def validate_presence(name, value, params)
-      return unless params[:presence]
+    def validate_presence(name, value, _param)
       raise "#{name} can't be nil." if value.nil?
       raise "#{name} can't be empty line." if value.to_s.empty?
     end
 
-    def validate_format(name, value, params)
-      format_val = params[:format]
-      return unless format_val
+    def validate_format(name, value, format_val)
       raise "#{name} has invalid format." if value !~ format_val
     end
 
-    def validate_type(name, value, params)
-      type_val = params[:type]
-      return unless type_val
+    def validate_type(name, value, type_val)
       raise "#Type of #{name} must be #{type_val}" unless value.is_a? type_val
+    end
+
+    def validate_each_type(name, value, type_val)
+      all_correspond = value.all? { |item| item.is_a? type_val }
+      raise "#All values of #{name} must be #{type_val}" unless all_correspond
     end
   end
 

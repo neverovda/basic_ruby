@@ -5,6 +5,7 @@ class Route
   attr_reader :stations, :name
 
   validate :name, :presence
+  validate :stations, :each_type, Station
 
   @@routes = []
 
@@ -18,7 +19,6 @@ class Route
     @name = name
     @stations = [f_station, l_station]
     validate!
-    validate_stations!
     @@routes << self
     register_instance
   end
@@ -40,21 +40,5 @@ class Route
   def route_list
     puts "Route #{@name} list:"
     @stations.each { |station| puts station.name }
-  end
-
-  def valid?
-    validate_stations!
-    super
-  end
-
-  protected
-
-  def validate_stations!
-    raise 'On the route, not only stations.' unless correspond_to_class?
-    true
-  end
-
-  def correspond_to_class?
-    @stations.all? { |station| station.is_a? Station }
   end
 end

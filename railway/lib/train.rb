@@ -9,6 +9,7 @@ class Train
   validate :number, :presence
   validate :number, :format, /^[a-z0-9]{3}-{0,1}[a-z0-9]{2}$/i
   validate :manufacturer, :presence
+  validate :wagons, :each_type, Wagon
 
   @@trains = {}
 
@@ -68,25 +69,7 @@ class Train
     @wagons.each { |wagon| yield(wagon) }
   end
 
-  def valid?
-    validate_wagon
-    super
-  end
-
   protected
-
-  def validate_wagon
-    raise 'As part of the train there is not a wagon.' unless correspond_to_class?
-    raise 'Type of trein and type of wagon do not match.' unless correspond_to_type?
-  end
-
-  def correspond_to_class?
-    @wagons.all? { |wagon| wagon.is_a? Wagon }
-  end
-
-  def correspond_to_type?
-    @wagons.all? { |wagon| wagon.type == @type }
-  end
 
   def check_addition(wagon)
     raise 'The train is moving !!!' if @speed != 0
